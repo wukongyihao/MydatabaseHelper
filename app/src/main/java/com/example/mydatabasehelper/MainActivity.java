@@ -10,7 +10,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import org.litepal.crud.DataSupport;
 import org.litepal.tablemanager.Connector;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,18 +31,60 @@ public class MainActivity extends AppCompatActivity {
         Button queryData = (Button)findViewById(R.id.Query_data);
         Button createDatabase = (Button)findViewById(R.id.create_database);
 
-        addData.setOnClickListener(new View.OnClickListener() {
+        queryData.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Book book = new Book();
-                book.setName("the da vinci code");
-                book.setAuthor("dan brown");
-                book.setPages(454);
-                book.setPrice(14.44);
-                book.setPress("unknow");
-                book.save();
+            public void onClick(View v) {
+                List<Book> books = DataSupport.findAll(Book.class);
+                for (Book book : books){
+                    Log.d("123123","book name is" + book.getName());
+                    Log.d("123123","book author is" + book.getAuthor());
+                    Log.d("123123","book page is" + book.getPages());
+                    Log.d("123123","book price  is" + book.getPrice());
+                    Log.d("123123","book Press  is" + book.getPress());
+                }
             }
         });
+
+
+        deleteData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DataSupport.deleteAll(Book.class,"price < ?","14.5");
+            }
+        });
+
+
+        updateDta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Book book = new Book();
+//                book.setName("the lost symbol");
+//                book.setAuthor("dan brown");
+//                book.setPages(510);
+//                book.setPrice(19.95);
+//                book.setPress("unknow");
+//                book.save();
+//                book.setPrice(10.01);
+//                book.save();
+                book.setPrice(14.96);
+                book.setPress("anchor");
+                book.updateAll("name = ? and author = ?","the lost symbol","dan brown");
+            }
+        });
+
+
+//        addData.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Book book = new Book();
+//                book.setName("the da vinci code");
+//                book.setAuthor("dan brown");
+//                book.setPages(454);
+//                book.setPrice(14.44);
+//                book.setPress("unknow");
+//                book.save();
+//            }
+//        });
 
 
         createDatabase.setOnClickListener(new View.OnClickListener() {
